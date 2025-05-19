@@ -325,7 +325,11 @@ public class FlutterAppauthPlugin implements FlutterPlugin, MethodCallHandler, P
             authRequestBuilder.setNonce(nonce);
         }
 
-        authRequestBuilder.setState(null);
+//        authRequestBuilder.setState(null);
+        if (additionalParameters != null && additionalParameters.containsKey("state")) {
+            authRequestBuilder.setState(additionalParameters.get("state"));
+        }
+
         if(!promptValues.isEmpty()){
             final String codeChallenge = promptValues.get(0);
             authRequestBuilder.setCodeVerifier(codeChallenge, codeChallenge, "S256");
