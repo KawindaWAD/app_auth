@@ -24,6 +24,7 @@
 @property(nonatomic, strong) NSString *refreshToken;
 @property(nonatomic, strong) NSString *codeVerifier;
 @property(nonatomic, strong) NSString *nonce;
+@property(nonatomic, strong) NSString *state;
 @property(nonatomic, strong) NSString *authorizationCode;
 @property(nonatomic, strong) NSArray *scopes;
 @property(nonatomic, strong) NSDictionary *serviceConfigurationParameters;
@@ -45,6 +46,7 @@
     _codeVerifier = [ArgumentProcessor processArgumentValue:arguments withKey:@"codeVerifier"];
     _grantType = [ArgumentProcessor processArgumentValue:arguments withKey:@"grantType"];
     _scopes = [ArgumentProcessor processArgumentValue:arguments withKey:@"scopes"];
+    _state = [ArgumentProcessor processArgumentValue:arguments withKey:@"state"];
     _serviceConfigurationParameters = [ArgumentProcessor processArgumentValue:arguments withKey:@"serviceConfiguration"];
     _additionalParameters = [ArgumentProcessor processArgumentValue:arguments withKey:@"additionalParameters"];
     _preferEphemeralSession = [[ArgumentProcessor processArgumentValue:arguments withKey:@"preferEphemeralSession"] isEqual:@YES];
@@ -156,7 +158,7 @@ AppAuthAuthorization* authorization;
         
         
         OIDServiceConfiguration *serviceConfiguration = [self processServiceConfigurationParameters:requestParameters.serviceConfigurationParameters];
-        _currentAuthorizationFlow = [authorization performAuthorization:serviceConfiguration clientId:requestParameters.clientId clientSecret:requestParameters.clientSecret scopes:requestParameters.scopes redirectUrl:requestParameters.redirectUrl additionalParameters:requestParameters.additionalParameters preferEphemeralSession:requestParameters.preferEphemeralSession result:result exchangeCode:exchangeCode nonce:requestParameters.nonce codeChallenge:codeChallenge];
+        _currentAuthorizationFlow = [authorization performAuthorization:serviceConfiguration clientId:requestParameters.clientId clientSecret:requestParameters.clientSecret scopes:requestParameters.scopes redirectUrl:requestParameters.redirectUrl additionalParameters:requestParameters.additionalParameters preferEphemeralSession:requestParameters.preferEphemeralSession result:result exchangeCode:exchangeCode nonce:requestParameters.nonce codeChallenge:codeChallenge state:requestParameters.state];
     } else if (requestParameters.discoveryUrl) {
         NSURL *discoveryUrl = [NSURL URLWithString:requestParameters.discoveryUrl];
         [OIDAuthorizationService discoverServiceConfigurationForDiscoveryURL:discoveryUrl
@@ -168,7 +170,7 @@ AppAuthAuthorization* authorization;
                 return;
             }
 
-            self->_currentAuthorizationFlow = [authorization performAuthorization:configuration clientId:requestParameters.clientId clientSecret:requestParameters.clientSecret scopes:requestParameters.scopes redirectUrl:requestParameters.redirectUrl additionalParameters:requestParameters.additionalParameters preferEphemeralSession:requestParameters.preferEphemeralSession result:result exchangeCode:exchangeCode nonce:requestParameters.nonce codeChallenge:@"yourCustomCodeChallenge"];
+            self->_currentAuthorizationFlow = [authorization performAuthorization:configuration clientId:requestParameters.clientId clientSecret:requestParameters.clientSecret scopes:requestParameters.scopes redirectUrl:requestParameters.redirectUrl additionalParameters:requestParameters.additionalParameters preferEphemeralSession:requestParameters.preferEphemeralSession result:result exchangeCode:exchangeCode nonce:requestParameters.nonce codeChallenge:@"yourCustomCodeChallenge" state:requestParameters.state];
         }];
     } else {
         NSURL *issuerUrl = [NSURL URLWithString:requestParameters.issuer];
@@ -181,7 +183,7 @@ AppAuthAuthorization* authorization;
                 return;
             }
 
-            self->_currentAuthorizationFlow = [authorization performAuthorization:configuration clientId:requestParameters.clientId clientSecret:requestParameters.clientSecret scopes:requestParameters.scopes redirectUrl:requestParameters.redirectUrl additionalParameters:requestParameters.additionalParameters preferEphemeralSession:requestParameters.preferEphemeralSession result:result exchangeCode:exchangeCode nonce:requestParameters.nonce codeChallenge:@"yourCustomCodeChallenge"];
+            self->_currentAuthorizationFlow = [authorization performAuthorization:configuration clientId:requestParameters.clientId clientSecret:requestParameters.clientSecret scopes:requestParameters.scopes redirectUrl:requestParameters.redirectUrl additionalParameters:requestParameters.additionalParameters preferEphemeralSession:requestParameters.preferEphemeralSession result:result exchangeCode:exchangeCode nonce:requestParameters.nonce codeChallenge:@"yourCustomCodeChallenge" state:requestParameters.state];
         }];
     }
 }

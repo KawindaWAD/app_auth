@@ -2,7 +2,7 @@
 
 @implementation AppAuthIOSAuthorization
 
-- (id<OIDExternalUserAgentSession>) performAuthorization:(OIDServiceConfiguration *)serviceConfiguration clientId:(NSString*)clientId clientSecret:(NSString*)clientSecret scopes:(NSArray *)scopes redirectUrl:(NSString*)redirectUrl additionalParameters:(NSDictionary *)additionalParameters preferEphemeralSession:(BOOL)preferEphemeralSession result:(FlutterResult)result exchangeCode:(BOOL)exchangeCode nonce:(NSString*)nonce codeChallenge:(NSString *)codeChallenge {
+- (id<OIDExternalUserAgentSession>) performAuthorization:(OIDServiceConfiguration *)serviceConfiguration clientId:(NSString*)clientId clientSecret:(NSString*)clientSecret scopes:(NSArray *)scopes redirectUrl:(NSString*)redirectUrl additionalParameters:(NSDictionary *)additionalParameters preferEphemeralSession:(BOOL)preferEphemeralSession result:(FlutterResult)result exchangeCode:(BOOL)exchangeCode nonce:(NSString*)nonce codeChallenge:(NSString *)codeChallenge state:(NSString*)state {
   NSString *codeVerifier = [OIDAuthorizationRequest generateCodeVerifier];
 //  NSString *codeChallenge = [OIDAuthorizationRequest codeChallengeS256ForVerifier:codeVerifier];
 
@@ -13,7 +13,7 @@
                                                    scope:[OIDScopeUtilities scopesWithArray:scopes]
                                              redirectURL:[NSURL URLWithString:redirectUrl]
                                             responseType:OIDResponseTypeCode
-                                                   state: nil
+                                                   state: state != nil ? state : [OIDAuthorizationRequest generateState]
                                                    nonce: nonce != nil ? nonce : [OIDAuthorizationRequest generateState]
                                             codeVerifier: codeVerifier
                                            codeChallenge:codeChallenge
